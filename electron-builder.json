@@ -1,0 +1,16 @@
+{
+    "appId": "com.yangzhie.charm-helper", 
+    "files": ["dist-electron", "dist-react"],
+    "icon": "./icon.png",
+    "extraResources": ["dist-electron/preload.cjs", "src/assets/**"],
+    "mac": {
+        "target": "dmg"
+    },
+    "linux": {
+        "target": "AppImage",
+        "category": "Utility"
+    },
+    "win": {
+        "target": ["portable", "msi"]
+    }
+}
