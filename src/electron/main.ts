@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from "electron";
 import path from "path";
 import { isDev } from "./utils.js";
+import { fetchUrl } from "./fetch.js";
 
 app.on("ready", () => {
     const mainWindow = new BrowserWindow({});
@@ -12,4 +13,6 @@ app.on("ready", () => {
         // path helps configure Windows' \
         mainWindow.loadFile(path.join(app.getAppPath() + "/dist-react/index.html"));
     }
+
+    fetchUrl();
 })
