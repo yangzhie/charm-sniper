@@ -1,69 +1,34 @@
-# React + TypeScript + Vite
+Rust [https://github.com/dyc3/steamguard-cli]
+1. download release [https://github.com/dyc3/steamguard-cli/releases]
+2. move `sudo mv ./steamguard /usr/local/bin`
+3. manage perms `chmod +x ./steamguard`
+4. install steamguard-cli via rust toolchain `cargo install steamguard-cli`
+5. set it up `steamguard setup`
+6. codes located at `~/.config/steamguard-cli/maFiles/`
+7. extract `shared_secret`
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Docker [https://github.com/csfloat/inspect]
+1. pull image `docker pull step7750/csgofloat:latest`
+2. run `docker run -d --name csgofloat -v /host/config:/config -p 80:80 -p 443:443 step7750 csgofloat:latest`
+3. auto generates config.js in `/host/config`
+4. edit config to add steam account bot (user, pass, auth (shared_secret Xk1ZABRxVsMutwz0IFWPQyhqb6w=))
+5.0. set up postgres db
+5.1. su - (swtitch to root)
+5.2. sudo -u postgres psql
+5.3. 
 
-Currently, two official plugins are available:
+CREATE USER csgofloat WITH PASSWORD 'pass';
+CREATE DATABASE csgofloatdb OWNER csgofloat;
+GRANT ALL PRIVILEGES ON DATABASE csgofloatdb TO csgofloat;
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+5.4. \q -> exit
+5.5. URI: postgresql://csgofloat:Doorlessorc987@localhost:5432/csgofloatdb
+6. config.js: `ip addr show docker0` -> `172.17.0.1` for postgres uri -> `sudo docker logs <container>`
+7. postgres rejects external (apart from localhost): switch to * in `/var/lib/postgres/data/postgresql.conf`
+8. verify docker and postgresql listen `psql -U csgofloat -d csgofloatdb -h 172.17.0.1`
+9. delete existing docker container`sudo docker rm csgofloat`
+10. check status `sudo docker ps -a`
+11. start docker `sudo docker start csgofloat`
+12. verify api works `http://<ip>:<port>/?url=steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20S76561198084749846A698323590D7935523998312483177`
+* ip = localhost (inside a Docker container talking to PostgreSQL)
+* port = docker config file host
