@@ -1,23 +1,19 @@
 import "dotenv/config"; 
 
-const steamAPIKey = process.env.steamAPIKey
+const steamSessionID = process.env.steamSessionID
+const steamLoginSecure = process.env.steamLoginSecure
 
-// TODO: PRICE CONVERSION
 // @ts-ignore
 // Get the inspect link of item from Steam
 export const fetchInspectLinkFromSteam = async (itemName, pageCount = 1) => {
     const steamURL = `https://steamcommunity.com/market/listings/730/${itemName}/render?count=${pageCount}&start=0&currency=1&country=US&language=english`;
-    // @ts-ignore
-    let type: string = "Charm";
-    try {
-        // Group items by type
-        if(itemName.includes("Charm")) {
-            type = "Charm";
-        } else {
-            type = "Skin";
-        }
 
-        const res = await fetch(steamURL);
+    try {
+        const res = await fetch(steamURL, {
+            headers: {
+                Cookie: `steamLoginSecure=${steamLoginSecure}; sessionid=${steamSessionID};`,
+            }
+        });
 
         if(!res.ok) {
             throw new Error(`Err: ${res.status}`);
@@ -39,6 +35,9 @@ export const fetchInspectLinkFromSteam = async (itemName, pageCount = 1) => {
 
         const [listingID, listing] = firstListing;
         // @ts-ignore
+        const priceUnconverted = listing["converted_price"];
+        const priceConverted = priceUnconverted / 100;
+        // @ts-ignore
         const assetID = listing["asset"]["id"];
         // @ts-ignore
         const templateLink: string = listing["asset"]["market_actions"][0]["link"];
@@ -47,8 +46,7 @@ export const fetchInspectLinkFromSteam = async (itemName, pageCount = 1) => {
         const inspectLink = templateLink
             .replace("%listingid%", listingID)
             .replace("%assetid%", assetID);
-        // @ts-ignore
-        return {inspectLink, type};
+        return {inspectLink, priceConverted};
     } catch(err) {
         console.error(err);
     }
@@ -56,7 +54,7 @@ export const fetchInspectLinkFromSteam = async (itemName, pageCount = 1) => {
 
 // @ts-ignore
 // Use inspect link from Steam to obtain float/pattern info
-export const fetchInspectDataFromAPI = async (inspectLink, type) => {
+export const fetchInspectDataFromAPI = async (inspectLink) => {
     const inspectAPIURL = `http://localhost/?url=${inspectLink}`;
 
     try {
@@ -68,17 +66,10 @@ export const fetchInspectDataFromAPI = async (inspectLink, type) => {
 
         const data = await res.json();
 
-        // Get data based on type of asset
-        if(type == "Charm") {
-            const keychainData = data["iteminfo"]["keychains"];
-            const keychainPatternTemplate = keychainData[0].pattern;
-            return keychainPatternTemplate;
-        } else if(type == "Skin") {
-            const float = data["iteminfo"]["floatvalue"];
-            const stickersApplied = data["iteminfo"]["stickers"];
-            const keychainsApplied = data["iteminfo"]["keychains"];
-            return {float, stickersApplied, keychainsApplied};
-        }
+        const keychainData = data["iteminfo"]["keychains"];
+        const keychainPatternTemplate = keychainData[0].pattern;
+        console.log(keychainPatternTemplate)
+        return keychainPatternTemplate;
     } catch(err) {
         console.error(err);
     }
