@@ -1,13 +1,22 @@
 import "dotenv/config"; 
 
-const steamURL = "https://steamcommunity.com/market/listings/730/M4A4%20%7C%20Neo-Noir%20%28Minimal%20Wear%29/render?count=20&start=0&currency=1&country=US&language=english";
-const inspectLink = "steam://rungame/730/76561202255233023/+csgo_econ_action_preview%20M650327037878456658A45734023881D17152713756802352648";
-const apiURL = `https://api.csfloat.com/?url=${encodeURIComponent(inspectLink)}`;
-const floatURL = `https://csfloat.com/api/v1/listings/664968161364302228`;
-const apiKey: any = process.env.apiKey;
+const steamAPIKey = process.env.steamAPIKey
 
-export const fetchSteamUrl = async () => {
+// TODO: PRICE CONVERSION
+// @ts-ignore
+// Get the inspect link of item from Steam
+export const fetchInspectLinkFromSteam = async (itemName, pageCount = 1) => {
+    const steamURL = `https://steamcommunity.com/market/listings/730/${itemName}/render?count=${pageCount}&start=0&currency=1&country=US&language=english`;
+    // @ts-ignore
+    let type: string = "Charm";
     try {
+        // Group items by type
+        if(itemName.includes("Charm")) {
+            type = "Charm";
+        } else {
+            type = "Skin";
+        }
+
         const res = await fetch(steamURL);
 
         if(!res.ok) {
@@ -17,14 +26,15 @@ export const fetchSteamUrl = async () => {
         const data = await res.json();
 
         if(data["success"] == false) {
-            console.log("Request could not be processed at this time.")
+            console.log("Request could not be processed at this time.");
         }
 
+        // Obtain the first listing in the page
         const listings = data["listinginfo"];
         const firstListing = Object.entries(listings)[0];
 
         if(!firstListing) {
-            console.log("There are no listings for this item.")
+            console.log("There are no listings for this item.");
         }
 
         const [listingID, listing] = firstListing;
@@ -33,32 +43,44 @@ export const fetchSteamUrl = async () => {
         // @ts-ignore
         const templateLink: string = listing["asset"]["market_actions"][0]["link"];
 
+        // Replace generic template inspect link M and A values
         const inspectLink = templateLink
             .replace("%listingid%", listingID)
             .replace("%assetid%", assetID);
-
-        console.log(listingID);
-        return inspectLink;
+        // @ts-ignore
+        return {inspectLink, type};
     } catch(err) {
         console.error(err);
     }
 }
 
-export const fetchCSFloatURL = async () => {
+// @ts-ignore
+// Use inspect link from Steam to obtain float/pattern info
+export const fetchInspectDataFromAPI = async (inspectLink, type) => {
+    const inspectAPIURL = `http://localhost/?url=${inspectLink}`;
+
     try {
-        const res = await fetch(floatURL, {
-            headers: {
-                "Authorization": apiKey
-            }
-        });
+        const res = await fetch(inspectAPIURL);
 
         if(!res.ok) {
-            throw new Error(`Err: ${res.status}`)
+            throw new Error(`Err: ${res.status}`);
         }
 
         const data = await res.json();
-        console.log(data)
+
+        // Get data based on type of asset
+        if(type == "Charm") {
+            const keychainData = data["iteminfo"]["keychains"];
+            const keychainPatternTemplate = keychainData[0].pattern;
+            return keychainPatternTemplate;
+        } else if(type == "Skin") {
+            const float = data["iteminfo"]["floatvalue"];
+            const stickersApplied = data["iteminfo"]["stickers"];
+            const keychainsApplied = data["iteminfo"]["keychains"];
+            return {float, stickersApplied, keychainsApplied};
+        }
     } catch(err) {
         console.error(err);
     }
 }
+
