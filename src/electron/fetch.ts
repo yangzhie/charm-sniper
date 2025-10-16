@@ -5,7 +5,8 @@ const steamLoginSecure = process.env.steamLoginSecure
 
 // @ts-ignore
 // Get the inspect link of item from Steam
-export const fetchInspectLinkFromSteam = async (itemName, pageCount = 1) => {
+export const fetchInspectLinkFromSteam = async (itemName, pageCount = 2) => {
+    // Page count: 1 = cheapest, 10 = latest 
     const steamURL = `https://steamcommunity.com/market/listings/730/${itemName}/render?count=${pageCount}&start=0&currency=1&country=US&language=english`;
 
     try {
@@ -25,28 +26,36 @@ export const fetchInspectLinkFromSteam = async (itemName, pageCount = 1) => {
             console.log("Request could not be processed at this time.");
         }
 
-        // Obtain the first listing in the page
         const listings = data["listinginfo"];
-        const firstListing = Object.entries(listings)[0];
+        
+        // Obtain the latest listing on the page (used when pageCount = 10)
+        const latestListingId = Object.keys(listings).reduce((maxId, currentId) => {
+            return BigInt(currentId) > BigInt(maxId) ? currentId : maxId;
+        }, "0");
+        const latestListing = listings[latestListingId];
+        
+        // Get the latest listing's index/position
+        const listingIds = Object.keys(listings);
+        const latestListingIndex = listingIds.indexOf(latestListingId) + 1
 
-        if(!firstListing) {
+        if(!latestListing) {
             console.log("There are no listings for this item.");
         }
 
-        const [listingID, listing] = firstListing;
         // @ts-ignore
-        const priceUnconverted = listing["converted_price"];
+        const priceUnconverted = latestListing["converted_price"];
         const priceConverted = priceUnconverted / 100;
         // @ts-ignore
-        const assetID = listing["asset"]["id"];
+        const assetID = latestListing["asset"]["id"];
         // @ts-ignore
-        const templateLink: string = listing["asset"]["market_actions"][0]["link"];
+        const templateLink: string = latestListing["asset"]["market_actions"][0]["link"];
 
         // Replace generic template inspect link M and A values
         const inspectLink = templateLink
-            .replace("%listingid%", listingID)
+            .replace("%listingid%", latestListing["listingid"])
             .replace("%assetid%", assetID);
-        return {inspectLink, priceConverted};
+        console.log(priceConverted)
+        return {inspectLink, priceConverted, latestListingIndex};
     } catch(err) {
         console.error(err);
     }
@@ -68,7 +77,6 @@ export const fetchInspectDataFromAPI = async (inspectLink) => {
 
         const keychainData = data["iteminfo"]["keychains"];
         const keychainPatternTemplate = keychainData[0].pattern;
-        console.log(keychainPatternTemplate)
         return keychainPatternTemplate;
     } catch(err) {
         console.error(err);
