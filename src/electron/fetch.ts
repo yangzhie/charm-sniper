@@ -1,5 +1,7 @@
 import "dotenv/config"; 
 import { URLSearchParams } from "url";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime.js";
 
 const steamSessionID = process.env.steamSessionID;
 const steamLoginSecure = process.env.steamLoginSecure;
@@ -56,7 +58,6 @@ export const fetchInspectLinkFromSteam = async (itemName, pageCount = 10) => {
         const inspectLink = templateLink
             .replace("%listingid%", latestListing["listingid"])
             .replace("%assetid%", assetID);
-        console.log(priceConverted)
         return {inspectLink, priceConverted, latestListingIndex};
     } catch(err) {
         console.error(err);
@@ -87,15 +88,27 @@ export const fetchInspectDataFromAPI = async (inspectLink) => {
 
 // @ts-ignore
 // Fetch CSFloat data from CSFloat API
-export const fetchFromCSFloat = async (limit, sort, minFloat, maxFloat, paintSeed, type, marketHashName) => {
+export const fetchFromCSFloat = async (
+    limit = 10, 
+    sort = "lowest_price", 
+    minFloat = null, 
+    maxFloat = null, 
+    paintSeed = null, 
+    type = "buy_now",
+    // @ts-ignore 
+    marketHashName) => 
+{
     const csfloatURL = new URL("https://csfloat.com/api/v1/listings");
     const params = new URLSearchParams();
 
     if(limit !== undefined) {params.append("limit", limit.toString())};
     if(sort) {params.append("sort_by", sort)};
-    if(minFloat !== undefined) {params.append("min_float", minFloat.toString())};
-    if(maxFloat !== undefined) {params.append("max_float", maxFloat.toString())};
-    if(paintSeed !== undefined) {params.append("paint_seed", paintSeed.toString())};
+    // @ts-ignore
+    if(minFloat !== null) {params.append("min_float", minFloat.toString())};
+    // @ts-ignore
+    if(maxFloat !== null) {params.append("max_float", maxFloat.toString())};
+    // @ts-ignore
+    if(paintSeed != null) {params.append("paint_seed", paintSeed.toString())};
     if(type !== undefined) {params.append("type", type)};
     if(marketHashName !== undefined) {params.append("market_hash_name", marketHashName)};
 
@@ -113,8 +126,38 @@ export const fetchFromCSFloat = async (limit, sort, minFloat, maxFloat, paintSee
             throw new Error(`Err: ${res.status}`);
         }
 
-        const data = await res.json();
-        console.log(data)
+        let data = await res.json();
+
+        // Extract data
+        const itemID = data["data"][0]["id"];
+
+        const timestamp = data["data"][0]["created_at"];
+        const postedTime = dayjs(timestamp);
+        dayjs.extend(relativeTime);
+        const timeMessage = postedTime.fromNow();
+
+        const price = data["data"][0]["price"] / 100;
+
+        const charmIndex = data["data"][0]["item"]["keychain_index"];
+        const charmPattern = data["data"][0]["item"]["keychain_pattern"];
+        const icon = data["data"][0]["item"]["icon_url"];
+        const name = data["data"][0]["item"]["market_hash_name"];
+        const inspectLink = data["data"][0]["item"]["inspect_link"];
+
+        const obj = {
+            itemID,
+            timeMessage,
+            price,
+            charmIndex,
+            charmPattern,
+            icon,
+            name,
+            inspectLink,
+        };
+
+        console.log(obj)
+
+        return obj;
     } catch(err) {
         console.error(err);
     }

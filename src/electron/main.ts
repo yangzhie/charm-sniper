@@ -14,29 +14,29 @@ app.on("ready", () => {
         mainWindow.loadFile(path.join(app.getAppPath() + "/dist-react/index.html"));
     }
 
-    // // const itemName = "Charm%20%7C%20Lil'%20Zen";
-    // const itemName = "Charm%20%7C%20Lil'%20Facelift";
-    // const pageCount = 10; // 1, 10
+    const itemName = "Charm%20%7C%20Lil'%20Zen";
+    // // const itemName = "Charm%20%7C%20Lil'%20Facelift";
+    // const pageCount = 1; // 1, 10
 
     // async function temp() {
     //     const data = await fetchInspectLinkFromSteam(itemName, pageCount);
     //     // @ts-ignore
-    //     const pattern = fetchInspectDataFromAPI(data?.inspectLink);
-    //     console.log(pattern)
-    //     console.log(data?.latestListingIndex)
-    //     console.log(data?.priceConverted)
+    //     const pattern = await fetchInspectDataFromAPI(data?.inspectLink);
+
+    //     console.log("Charm: " + decodeURI(itemName))
+    //     console.log("Charm Price: $" + data?.priceConverted)
+    //     console.log("Charm Pattern: " + pattern)
+    //     console.log("Charm Location: " + data?.latestListingIndex + "\n")
     // }
 
     // setInterval(async () => {
     //     temp()
-    // }, 10000)
+    // }, 2000)
 
-    const limit = 10;
-    const sort = "lowest_price"
-    const minFloat = 0
-    const maxFloat = 1
-    const paintSeed = 1
+    const limit = 1;
+    const sort = "most_recent"
     const type = "buy_now"
-    // const marketHashName = ""
-    fetchFromCSFloat(limit, sort, minFloat, maxFloat, paintSeed, type);
+    const hash = "Charm | Lil' Zen"
+    // @ts-ignore
+    fetchFromCSFloat(limit, sort, undefined, undefined, null, type, hash);
 })
