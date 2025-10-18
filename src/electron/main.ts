@@ -4,7 +4,12 @@ import { isDev } from "./utils.js";
 import { fetchInspectLinkFromSteam, fetchInspectDataFromAPI, fetchFromCSFloat } from "./fetch.js";
 
 app.on("ready", () => {
-    const mainWindow = new BrowserWindow({});
+    const mainWindow = new BrowserWindow({
+        title: "Charm Sniper",
+        width: 1100,
+        height: 700,
+        autoHideMenuBar: true,
+    });
 
     if (isDev()) {
         mainWindow.loadURL('http://localhost:9999/');
