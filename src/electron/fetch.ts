@@ -169,8 +169,6 @@ export const fetchFromCSFloat = async (
             inspectLink,
         };
 
-        console.log(obj)
-
         return obj;
     } catch(err) {
         console.error(err);

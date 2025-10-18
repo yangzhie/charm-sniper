@@ -17,11 +17,13 @@
     "dist:linux": "npm run transpile:electron && npm run build && electron-builder --linux --x64"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.14",
     "csgofloat": "^4.0.0",
     "dayjs": "^1.11.18",
     "dotenv": "^17.2.3",
     "react": "^19.1.1",
-    "react-dom": "^19.1.1"
+    "react-dom": "^19.1.1",
+    "tailwindcss": "^4.1.14"
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
