@@ -1,7 +1,30 @@
+import Collection from "./collection/Collection";
+
 function App() {
   return (
     <>
-      <h1 className="text-4xl font-bold text-blue-500">Tailwind working</h1>
+      <div>
+        Charm Sniper v1.0.0
+      </div>
+
+      <div className="flex w-screen">
+        <div className="w-2/3 text-center align-bottom">
+          <p>
+            Collections
+          </p>
+          
+          <Collection />
+        </div>
+
+        <div className="w-1/3 h-full">
+          <div>
+            Notifications
+          </div>
+          <div>
+            No charms selected!
+          </div>
+        </div>
+      </div>
     </>
   )
 }

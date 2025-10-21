@@ -2,6 +2,10 @@
 
 /* Fonts here for later */
 
+* {
+  border: red 1px solid;
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 
