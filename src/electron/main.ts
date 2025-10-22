@@ -25,35 +25,28 @@ app.on("ready", () => {
 		);
 	}
 
-	const itemName = "Charm%20%7C%20Lil'%20Zen";
-	// const itemName = "Charm%20%7C%20Lil'%20Facelift";
-	const pageCount = 10; // 1, 10
+	// const itemName = "Charm%20%7C%20Lil%27%20Ferno";
+	// const pageCount = 10;
 
 	// async function temp() {
-	//     const listingArray = await fetchInspectLinkFromSteam(itemName, pageCount);
-	//     // @ts-ignore
-	//     const arr = await fetchInspectDataFromAPI(listingArray);
+	// 	const listingArray = await fetchInspectLinkFromSteam(
+	// 		itemName,
+	// 		pageCount
+	// 	);
 
-	//     console.log(arr)
+	// 	const arr = await fetchInspectDataFromAPI(listingArray);
 
-	//     // console.log("Charm: " + decodeURI(itemName))
-	//     // console.log("Charm Price: $" + data?.priceConverted)
-	//     // console.log("Charm Pattern: " + pattern)
-	//     // console.log("Charm Location: " + data?.latestListingIndex + "\n")
+	// 	console.log(arr);
 	// }
 
-	// temp()
-
 	// setInterval(async () => {
-	//     temp()
-	// }, 15000)
+	// 	temp();
+	// }, 15000);
 
-	const limit = 1;
+	const limit = 10;
 	const sort = "most_recent";
 	const type = "buy_now";
-	const hash = "Charm | Lil' Zen";
-	// @ts-ignore
-	// setInterval(async () => {
-	//     fetchFromCSFloat(limit, sort, undefined, undefined, null, type, hash);
-	// }, 2000)
+	const hash = "Charm | Lil' Ferno";
+
+	fetchFromCSFloat(limit, sort, undefined, undefined, null, type, hash);
 });
