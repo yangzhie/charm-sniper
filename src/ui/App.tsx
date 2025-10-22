@@ -1,3 +1,4 @@
+import Charm from "./charms/Charm";
 import Charms from "./charms/Charms";
 import Collection from "./collections/Collection";
 import Notification from "./notifications/Notification";
@@ -12,7 +13,7 @@ function App() {
 
 				<div className="flex h-full">
 					<div className="w-2/3 text-center">
-						<Charms />
+						<Charm />
 					</div>
 
 					<div className="w-1/3 border-l-1">
