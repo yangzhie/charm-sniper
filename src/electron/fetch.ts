@@ -187,3 +187,83 @@ export const fetchFromCSFloat = async (
 		return null;
 	}
 };
+
+// Fetch collections data
+export const fetchCollections =
+	async (): Promise<FetchCollectionsResult | null> => {
+		const collectionsAPIURL: string =
+			"https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/en/keychains.json";
+
+		try {
+			const res: Response = await fetch(collectionsAPIURL);
+			const data: CollectionsFetch[] = await res.json();
+
+			// Declare arrays
+			const missingLinkArr: Charms[] = [];
+			const smallArmsArr: Charms[] = [];
+			const drBoomArr: Charms[] = [];
+			const missingLinkCommunityArr: Charms[] = [];
+			const collectionArr: CollectionsObj[] = [];
+
+			// Hard-coded as data contains Highlight charms too
+			for (let i = 0; i < 78; i++) {
+				// Extract charm data
+				const charm: CharmsObj = {
+					name: data[i]["name"],
+					image: data[i]["image"],
+					color: data[i]["rarity"]["color"],
+				};
+
+				// Extract collection data
+				const collection: CollectionsObj = {
+					collectionName: data[i]["collections"][0]["name"],
+					collectionImage: data[i]["collections"][0]["image"],
+				};
+
+				// Check if this collection is already in collectionArr
+				const collectionExists: boolean = collectionArr.some(
+					(col) => col.collectionName === collection.collectionName
+				);
+
+				// Create a new collection object only if it doesn't exist
+				if (!collectionExists) {
+					collection["collectionName"] = collection.collectionName;
+					collection["collectionImage"] = collection.collectionImage;
+
+					collectionArr.push(collection);
+				}
+
+				// Push charm data into main collection array
+				// Push collection data into collection array if not in already
+				if (
+					collection.collectionName == "Missing Link Charm Collection"
+				) {
+					missingLinkArr.push(charm);
+				} else if (
+					collection.collectionName == "Small Arms Charm Collection"
+				) {
+					smallArmsArr.push(charm);
+				} else if (
+					collection.collectionName == "Dr Boom Charm Collection"
+				) {
+					drBoomArr.push(charm);
+				} else if (
+					collection.collectionName ==
+					"Missing Link Community Charm Collection"
+				) {
+					missingLinkCommunityArr.push(charm);
+				}
+			}
+
+			return {
+				missingLinkArr,
+				smallArmsArr,
+				drBoomArr,
+				missingLinkCommunityArr,
+				collectionArr,
+			};
+		} catch (err) {
+			console.error(err);
+			return null;
+		}
+	};

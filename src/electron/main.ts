@@ -1,10 +1,11 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from "path";
 import { isDev } from "./utils.js";
 import {
 	fetchInspectLinkFromSteam,
 	fetchInspectDataFromAPI,
 	fetchFromCSFloat,
+	fetchCollections,
 } from "./fetch.js";
 
 app.on("ready", () => {
@@ -25,28 +26,37 @@ app.on("ready", () => {
 		);
 	}
 
-	// const itemName = "Charm%20%7C%20Lil%27%20Ferno";
-	// const pageCount = 10;
+	// ipcMain.handle("get-api-data", async (event, args) => {
+	// 	const itemName = "Charm%20%7C%20Lil%27%20Ferno";
+	// 	const pageCount = 10;
 
-	// async function temp() {
-	// 	const listingArray = await fetchInspectLinkFromSteam(
-	// 		itemName,
-	// 		pageCount
-	// 	);
+	// 	const listingArray = await fetchInspectLinkFromSteam();
+	// 	const object = await fetchInspectDataFromAPI(listingArray);
+	// 	return object;
+	// });
 
-	// 	const arr = await fetchInspectDataFromAPI(listingArray);
+	// const limit = 10;
+	// const sort = "most_recent";
+	// const type = "buy_now";
+	// const hash = "Charm | Lil' Ferno";
 
-	// 	console.log(arr);
-	// }
-
-	// setInterval(async () => {
-	// 	temp();
-	// }, 15000);
-
-	const limit = 10;
-	const sort = "most_recent";
-	const type = "buy_now";
-	const hash = "Charm | Lil' Ferno";
-
-	fetchFromCSFloat(limit, sort, undefined, undefined, null, type, hash);
+	// fetchFromCSFloat(limit, sort, undefined, undefined, null, type, hash);
+	(async () => {
+		const data = await fetchCollections();
+		console.log("MISSING");
+		console.log(data?.missingLinkArr);
+		console.log("\n");
+		console.log("SMALLARMS");
+		console.log(data?.smallArmsArr);
+		console.log("\n");
+		console.log("MISSINGCOMM");
+		console.log(data?.missingLinkCommunityArr);
+		console.log("\n");
+		console.log("DRBOOM");
+		console.log(data?.drBoomArr);
+		console.log("\n");
+		console.log("COLLECTIONS");
+		console.log(data?.collectionArr);
+		console.log("\n");
+	})();
 });

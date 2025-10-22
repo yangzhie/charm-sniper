@@ -75,3 +75,45 @@ type CSFloatItemInfo = {
 	market_hash_name: string;
 	inspect_link: string;
 };
+
+type Charms = {
+	name: string;
+	image: string;
+	color: string;
+};
+
+type Collections = {
+	name: string;
+	image: string;
+};
+
+type FetchCollectionsResult = {
+	missingLinkArr: CharmsArray[];
+	smallArmsArr: CharmsArray[];
+	drBoomArr: CharmsArray[];
+	missingLinkCommunityArr: CharmsArray[];
+	collectionArr: CollectionsArray[];
+};
+
+type CollectionsFetch = {
+	name: string;
+	image: string;
+	rarity: {
+		color: string;
+	};
+	collections: {
+		name: string;
+		image: string;
+	}[];
+};
+
+type CharmsObj = {
+	name: string;
+	image: string;
+	color: string;
+};
+
+type CollectionsObj = {
+	collectionName: string;
+	collectionImage: string;
+};
