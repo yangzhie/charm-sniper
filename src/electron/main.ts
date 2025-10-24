@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import path from "path";
-import { isDev } from "./utils.js";
+import { isDev, getPreloadPath } from "./utils.js";
 import {
 	fetchInspectLinkFromSteam,
 	fetchInspectDataFromAPI,
@@ -14,6 +14,11 @@ app.on("ready", () => {
 		width: 1100,
 		height: 700,
 		autoHideMenuBar: true,
+		webPreferences: {
+			preload: getPreloadPath(),
+			contextIsolation: true,
+			nodeIntegration: false,
+		},
 	});
 
 	if (isDev()) {
@@ -35,28 +40,8 @@ app.on("ready", () => {
 	// 	return object;
 	// });
 
-	// const limit = 10;
-	// const sort = "most_recent";
-	// const type = "buy_now";
-	// const hash = "Charm | Lil' Ferno";
-
-	// fetchFromCSFloat(limit, sort, undefined, undefined, null, type, hash);
-	(async () => {
-		const data = await fetchCollections();
-		console.log("MISSING");
-		console.log(data?.missingLinkArr);
-		console.log("\n");
-		console.log("SMALLARMS");
-		console.log(data?.smallArmsArr);
-		console.log("\n");
-		console.log("MISSINGCOMM");
-		console.log(data?.missingLinkCommunityArr);
-		console.log("\n");
-		console.log("DRBOOM");
-		console.log(data?.drBoomArr);
-		console.log("\n");
-		console.log("COLLECTIONS");
-		console.log(data?.collectionArr);
-		console.log("\n");
-	})();
+	// Recieves data from renderer
+	ipcMain.on("message", (event, args) => {
+		console.log(args);
+	});
 });
