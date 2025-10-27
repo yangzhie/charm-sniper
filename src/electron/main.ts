@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, webContents } from "electron";
 import path from "path";
 import { isDev, getPreloadPath } from "./utils.js";
 import {
@@ -31,17 +31,10 @@ app.on("ready", () => {
 		);
 	}
 
-	// ipcMain.handle("get-api-data", async (event, args) => {
-	// 	const itemName = "Charm%20%7C%20Lil%27%20Ferno";
-	// 	const pageCount = 10;
-
-	// 	const listingArray = await fetchInspectLinkFromSteam();
-	// 	const object = await fetchInspectDataFromAPI(listingArray);
-	// 	return object;
-	// });
-
-	// Recieves data from renderer
-	ipcMain.on("message", (event, args) => {
-		console.log(args);
+	// Send static collection + charm data to renderer (one-time)
+	// Renderer requests the data
+	ipcMain.handle("get-static-data", async () => {
+		const data = await fetchCollections();
+		return data;
 	});
 });
