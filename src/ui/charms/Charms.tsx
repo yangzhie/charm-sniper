@@ -1,9 +1,9 @@
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
+import BackBtn from "../utils/BackBtn";
 
 // @ts-ignore
 function Charms({ charmsData }) {
 	const { collectionCharm } = useParams();
-	const navigate = useNavigate();
 
 	// Map slug to the corresponding key
 	const collectionCharmMap = {
@@ -19,14 +19,7 @@ function Charms({ charmsData }) {
 	const charms = charmsData[selectedKey];
 	return (
 		<>
-			<div className="flex justify-start">
-				<button
-					className="p-2 cursor-pointer"
-					onClick={() => navigate(-1)}
-				>
-					Back
-				</button>
-			</div>
+			<BackBtn />
 
 			<div className="h-full">
 				<div className="flex flex-wrap justify-center gap-6 p-1 mt-6">

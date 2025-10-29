@@ -1,4 +1,4 @@
-function Notification() {
+function Notifications() {
 	return (
 		<>
 			<div className="h-full w-full">
@@ -78,4 +78,4 @@ function Notification() {
 	);
 }
 
-export default Notification;
+export default Notifications;

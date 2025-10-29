@@ -6,10 +6,11 @@ import {
 	Navigate,
 } from "react-router-dom";
 
+import Title from "./utils/Title";
 import Charm from "./charms/Charm";
 import Charms from "./charms/Charms";
-import Collection from "./collections/Collection";
-import Notification from "./notifications/Notification";
+import Collections from "./collections/Collections";
+import Notifications from "./notifications/Notifications";
 
 function App() {
 	const [missingLinkCollection, setMissingLinkCollection] = useState([]);
@@ -47,9 +48,7 @@ function App() {
 		<>
 			<Router>
 				<div className="h-screen box-border overflow-hidden">
-					<div className="border-white border-b-1 p-1">
-						Charm Sniper v1.0.0
-					</div>
+					<Title />
 
 					<div className="flex h-full">
 						<div className="w-2/3 text-center">
@@ -65,7 +64,7 @@ function App() {
 								<Route
 									path="/collections"
 									element={
-										<Collection
+										<Collections
 											collectionArr={collectionArr}
 										/>
 									}
@@ -84,7 +83,7 @@ function App() {
 						</div>
 
 						<div className="w-1/3 border-l-1">
-							<Notification />
+							<Notifications />
 						</div>
 					</div>
 				</div>

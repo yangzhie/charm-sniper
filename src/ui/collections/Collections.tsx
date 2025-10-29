@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 
 // @ts-ignore
-function Collection({ collectionArr }) {
+function Collections({ collectionArr }) {
 	const charms = [
 		"missingLink",
 		"smallArms",
@@ -43,4 +43,4 @@ function Collection({ collectionArr }) {
 	);
 }
 
-export default Collection;
+export default Collections;

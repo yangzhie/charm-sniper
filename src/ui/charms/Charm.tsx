@@ -1,20 +1,11 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import BackBtn from "../utils/BackBtn";
 
 function Charm() {
-	const navigate = useNavigate();
 	const { state } = useLocation();
-
-	console.log(state);
 	return (
 		<>
-			<div className="flex justify-start">
-				<button
-					className="p-2 cursor-pointer"
-					onClick={() => navigate(-1)}
-				>
-					Back
-				</button>
-			</div>
+			<BackBtn />
 
 			<div className="flex flex-col justify-center items-center">
 				<div className="flex w-full h-screen">
