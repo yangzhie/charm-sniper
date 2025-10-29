@@ -1,21 +1,13 @@
-// @ts-ignore
-function Collection({
-	// @ts-ignore
-	missingLinkCollection,
-	// @ts-ignore
-	smallArmsCollection,
-	// @ts-ignore
-	missingLinkCommunityCollection,
-	// @ts-ignore
-	drBoomCollection,
-}) {
-	const collectionArr = [
-		missingLinkCollection,
-		smallArmsCollection,
-		missingLinkCommunityCollection,
-		drBoomCollection,
-	];
+import { Link } from "react-router-dom";
 
+// @ts-ignore
+function Collection({ collectionArr }) {
+	const charms = [
+		"missingLink",
+		"smallArms",
+		"missingLinkCommunity",
+		"drBoom",
+	];
 	return (
 		<>
 			<div>
@@ -25,7 +17,8 @@ function Collection({
 						// @ts-ignore
 						collectionArr.map((collection, idx) => {
 							return (
-								<div
+								<Link
+									to={`/collections/${charms[idx]}`}
 									key={idx}
 									className="flex flex-col items-center justify-center px-10 m-0"
 								>
@@ -40,7 +33,7 @@ function Collection({
 											width={175}
 										/>
 									</div>
-								</div>
+								</Link>
 							);
 						})
 					}

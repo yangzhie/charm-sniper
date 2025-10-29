@@ -1,225 +1,57 @@
-function Charms() {
+import { useParams, useNavigate, Link } from "react-router-dom";
+
+// @ts-ignore
+function Charms({ charmsData }) {
+	const { collectionCharm } = useParams();
+	const navigate = useNavigate();
+
+	// Map slug to the corresponding key
+	const collectionCharmMap = {
+		missingLink: "missingLink",
+		smallArms: "smallArms",
+		missingLinkCommunity: "missingLinkCommunity",
+		drBoom: "drBoom",
+	};
+
+	// @ts-ignore
+	// Using object lookup, not array lookup
+	const selectedKey = collectionCharmMap[collectionCharm];
+	const charms = charmsData[selectedKey];
 	return (
 		<>
+			<div className="flex justify-start">
+				<button
+					className="p-2 cursor-pointer"
+					onClick={() => navigate(-1)}
+				>
+					Back
+				</button>
+			</div>
+
 			<div className="h-full">
-				<div className="text-3xl p-4 mt-6">Missing Links</div>
 				<div className="flex flex-wrap justify-center gap-6 p-1 mt-6">
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
-					<div className="flex flex-col w-24">
-						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-						</div>
-						<div className="text-lg">Name</div>
-					</div>
+					{
+						// @ts-ignore
+						charms.map((charm, idx) => (
+							<Link
+								to={`/collections/${collectionCharm}/${charm["name"]}`}
+								key={idx}
+								state={charm}
+							>
+								<div key={idx} className="flex flex-col w-24">
+									<div>
+										<img
+											src={charm["image"]}
+											alt={charm["name"]}
+										/>
+									</div>
+									<div className="text-lg">
+										{charm["name"]}
+									</div>
+								</div>
+							</Link>
+						))
+					}
 				</div>
 			</div>
 		</>

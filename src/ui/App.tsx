@@ -1,4 +1,11 @@
 import { useEffect, useState } from "react";
+import {
+	BrowserRouter as Router,
+	Routes,
+	Route,
+	Navigate,
+} from "react-router-dom";
+
 import Charm from "./charms/Charm";
 import Charms from "./charms/Charms";
 import Collection from "./collections/Collection";
@@ -10,10 +17,7 @@ function App() {
 	const [missingLinkCommunityCollection, setDrBoomCollection] = useState([]);
 	const [drBoomCollection, setMissingLinkCommunityCollection] = useState([]);
 
-	const [missingLink, setMissingLink] = useState([]);
-	const [smallArms, setSmallArms] = useState([]);
-	const [missingLinkCommunity, setMissingLinkCommunity] = useState([]);
-	const [drBoom, setDrBoom] = useState([]);
+	const [charmsData, setCharmsData] = useState({});
 
 	// Runs only after first render, never again
 	useEffect(() => {
@@ -24,36 +28,67 @@ function App() {
 			setDrBoomCollection(data["collectionArr"][2]);
 			setMissingLinkCommunityCollection(data["collectionArr"][3]);
 
-			setMissingLink(data["missingLinkArr"]);
-			setSmallArms(data["smallArmsArr"]);
-			setMissingLinkCommunity(data["missingLinkCommunityArr"]);
-			setDrBoom(data["drBoomArr"]);
+			setCharmsData({
+				missingLink: data["missingLinkArr"],
+				smallArms: data["smallArmsArr"],
+				missingLinkCommunity: data["missingLinkCommunityArr"],
+				drBoom: data["drBoomArr"],
+			});
 		});
 	}, []);
+
+	const collectionArr = [
+		missingLinkCollection,
+		smallArmsCollection,
+		missingLinkCommunityCollection,
+		drBoomCollection,
+	];
 	return (
 		<>
-			<div className="h-screen box-border overflow-hidden">
-				<div className="border-white border-b-1 p-1">
-					Charm Sniper v1.0.0
-				</div>
-
-				<div className="flex h-full">
-					<div className="w-2/3 text-center">
-						<Collection
-							missingLinkCollection={missingLinkCollection}
-							smallArmsCollection={smallArmsCollection}
-							missingLinkCommunityCollection={
-								missingLinkCommunityCollection
-							}
-							drBoomCollection={drBoomCollection}
-						/>
+			<Router>
+				<div className="h-screen box-border overflow-hidden">
+					<div className="border-white border-b-1 p-1">
+						Charm Sniper v1.0.0
 					</div>
 
-					<div className="w-1/3 border-l-1">
-						<Notification />
+					<div className="flex h-full">
+						<div className="w-2/3 text-center">
+							<Routes>
+								{/* Route to set root to collections */}
+								<Route
+									path="/"
+									element={
+										<Navigate to="/collections" replace />
+									}
+								/>
+
+								<Route
+									path="/collections"
+									element={
+										<Collection
+											collectionArr={collectionArr}
+										/>
+									}
+								/>
+
+								<Route
+									path="/collections/:collectionCharm"
+									element={<Charms charmsData={charmsData} />}
+								/>
+
+								<Route
+									path="/collections/:collectionCharm/:charm"
+									element={<Charm />}
+								/>
+							</Routes>
+						</div>
+
+						<div className="w-1/3 border-l-1">
+							<Notification />
+						</div>
 					</div>
 				</div>
-			</div>
+			</Router>
 		</>
 	);
 }

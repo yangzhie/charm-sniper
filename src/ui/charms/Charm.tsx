@@ -1,19 +1,27 @@
+import { useNavigate, useLocation } from "react-router-dom";
+
 function Charm() {
+	const navigate = useNavigate();
+	const { state } = useLocation();
+
+	console.log(state);
 	return (
 		<>
+			<div className="flex justify-start">
+				<button
+					className="p-2 cursor-pointer"
+					onClick={() => navigate(-1)}
+				>
+					Back
+				</button>
+			</div>
+
 			<div className="flex flex-col justify-center items-center">
 				<div className="flex w-full h-screen">
 					<div className="w-1/2 flex flex-col justify-start">
-						<div className="flex justify-start">
-							<button className="p-2">Back</button>
-						</div>
-
 						<div>
-							<img
-								src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-								alt=""
-							/>
-							<div className="text-2xl">Lil' Zen</div>
+							<img src={state["image"]} alt="" />
+							<div className="text-2xl">{state["name"]}</div>
 						</div>
 
 						<div className="flex flex-col mt-10 h-50">
