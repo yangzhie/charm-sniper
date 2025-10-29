@@ -21,6 +21,7 @@
     "csgofloat": "^4.0.0",
     "dayjs": "^1.11.18",
     "dotenv": "^17.2.3",
+    "eventemitter3": "^5.0.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.4",

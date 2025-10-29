@@ -1,8 +1,14 @@
 import { useLocation } from "react-router-dom";
+import { eventBus } from "../utils/eventBus";
 import BackBtn from "../utils/BackBtn";
 
 function Charm() {
 	const { state } = useLocation();
+
+	// Function to give data of current charm to Notifcation center
+	const addCharm = () => {
+		eventBus.emit("new-charm-added", state);
+	};
 	return (
 		<>
 			<BackBtn />
@@ -11,11 +17,17 @@ function Charm() {
 				<div className="flex w-full h-screen">
 					<div className="w-1/2 flex flex-col justify-start">
 						<div>
-							<img src={state["image"]} alt="" />
+							<img src={state["image"]} alt={state["name"]} />
 							<div className="text-2xl">{state["name"]}</div>
+							<button
+								className="mt-2 cursor-pointer"
+								onClick={addCharm}
+							>
+								Add Charm
+							</button>
 						</div>
 
-						<div className="flex flex-col mt-10 h-50">
+						<div className="flex flex-col mt-6 h-50">
 							<div>Preset Filter Tags</div>
 							<div className="flex flex-wrap gap-4 justify-center overflow-scroll overflow-x-hidden">
 								<div>Tag 1</div>

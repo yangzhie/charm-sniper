@@ -1,4 +1,16 @@
+// @ts-nocheck
+import { useState, useEffect } from "react";
+import { eventBus } from "../utils/eventBus";
+
 function Notifications() {
+	const [charm, setCharm] = useState(null);
+
+	useEffect(() => {
+		eventBus.on("new-charm-added", setCharm);
+		return () => eventBus.off("new-charm-added", setCharm);
+	}, []);
+
+	console.log(charm);
 	return (
 		<>
 			<div className="h-full w-full">
