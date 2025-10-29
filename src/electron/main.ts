@@ -37,4 +37,8 @@ app.on("ready", () => {
 		const data = await fetchCollections();
 		return data;
 	});
+
+	ipcMain.handle("listen-charm-name", async (event, charmName) => {
+		console.log(charmName);
+	});
 });

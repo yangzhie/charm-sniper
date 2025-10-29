@@ -1,29 +1,26 @@
-// @ts-nocheck
 import { useState, useEffect } from "react";
 import { eventBus } from "../utils/eventBus";
 
 function Notifications() {
-	const [charm, setCharm] = useState(null);
+	const [charm, setCharm] = useState<any>(null);
 
-	useEffect(() => {
+	useEffect((): any => {
 		eventBus.on("new-charm-added", setCharm);
 		return () => eventBus.off("new-charm-added", setCharm);
 	}, []);
 
 	console.log(charm);
+	if (!charm) return <div>No charm</div>;
 	return (
 		<>
 			<div className="h-full w-full">
 				<div className="text-2xl text-center p-2">Notifications</div>
 				<div className="flex flex-col justify-center items-center">
 					<div className="w-40">
-						<img
-							src="https://raw.githubusercontent.com/ByMykel/counter-strike-image-tracker/main/static/panorama/images/econ/keychains/drboom/kc_db_yinyang_png.png"
-							alt=""
-						/>
+						<img src={charm["image"]} alt={charm["name"]} />
 					</div>
 					<div className="flex text-lg justify-center items-center w-full p-1 mb-2">
-						Lil' Zen
+						{charm["name"]}
 					</div>
 				</div>
 				<div>
@@ -35,51 +32,6 @@ function Notifications() {
 						</tr>
 						<tr>
 							<td className="text-center">1</td>
-							<td className="text-center">88888</td>
-							<td className="text-center">$0.68</td>
-						</tr>
-						<tr>
-							<td className="text-center">2</td>
-							<td className="text-center">88888</td>
-							<td className="text-center">$0.68</td>
-						</tr>
-						<tr>
-							<td className="text-center">3</td>
-							<td className="text-center">88888</td>
-							<td className="text-center">$0.68</td>
-						</tr>
-						<tr>
-							<td className="text-center">4</td>
-							<td className="text-center">88888</td>
-							<td className="text-center">$0.68</td>
-						</tr>
-						<tr>
-							<td className="text-center">5</td>
-							<td className="text-center">88888</td>
-							<td className="text-center">$0.68</td>
-						</tr>
-						<tr>
-							<td className="text-center">6</td>
-							<td className="text-center">88888</td>
-							<td className="text-center">$0.68</td>
-						</tr>
-						<tr>
-							<td className="text-center">7</td>
-							<td className="text-center">88888</td>
-							<td className="text-center">$0.68</td>
-						</tr>
-						<tr>
-							<td className="text-center">8</td>
-							<td className="text-center">88888</td>
-							<td className="text-center">$0.68</td>
-						</tr>
-						<tr>
-							<td className="text-center">9</td>
-							<td className="text-center">88888</td>
-							<td className="text-center">$0.68</td>
-						</tr>
-						<tr>
-							<td className="text-center">10</td>
 							<td className="text-center">88888</td>
 							<td className="text-center">$0.68</td>
 						</tr>

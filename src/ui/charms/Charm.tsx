@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { useLocation } from "react-router-dom";
 import { eventBus } from "../utils/eventBus";
 import BackBtn from "../utils/BackBtn";
@@ -5,9 +6,13 @@ import BackBtn from "../utils/BackBtn";
 function Charm() {
 	const { state } = useLocation();
 
-	// Function to give data of current charm to Notifcation center
+	// Function to give data of current charm
 	const addCharm = () => {
+		// Give charm into to notification center
 		eventBus.emit("new-charm-added", state);
+
+		// Give charm name to main process
+		window.api.listenCharmName(state["name"]);
 	};
 	return (
 		<>
