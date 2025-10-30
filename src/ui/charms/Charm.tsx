@@ -1,11 +1,13 @@
 // @ts-nocheck
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { eventBus } from "../utils/eventBus";
 import BackBtn from "../utils/BackBtn";
 
 function Charm() {
 	const { state } = useLocation();
+	const [userInputFilter, setUserInputFilter] = useState("");
+	const [filterList, setFilterList] = useState([]);
 
 	// Poll charm data
 	const addCharm = async () => {
@@ -19,10 +21,33 @@ function Charm() {
 
 		// Listen for updates
 		const handleUpdate = (data) => {
-			console.log("Received charm data:", data);
 			eventBus.emit("new-charm-data", data);
 		};
 		window.api.onCharmDataUpdate(handleUpdate);
+	};
+
+	// Place user-input filter into filter list
+	const handleSubmit = (e) => {
+		e.preventDefault();
+
+		// Ignore empty strings
+		if (userInputFilter.trim() === "") return;
+
+		const newFilter = {
+			id: Date.now(),
+			value: userInputFilter,
+		};
+
+		// Push input into filter list
+		setFilterList((prev) => [...prev, newFilter]);
+
+		// Reset user input
+		setUserInputFilter("");
+	};
+
+	// Delete filter from filter list
+	const deleteFilter = (filterToDelete) => {
+		setFilterList((prev) => prev.filter((f) => f.id !== filterToDelete.id));
 	};
 	return (
 		<>
@@ -45,200 +70,45 @@ function Charm() {
 						<div className="flex flex-col mt-6 h-50">
 							<div>Preset Filter Tags</div>
 							<div className="flex flex-wrap gap-4 justify-center overflow-scroll overflow-x-hidden">
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
-								<div>Tag 1</div>
+								<div>Tags</div>
 							</div>
-						</div>
-
-						<div className="mt-5">
-							<form action="">
-								<input type="text" placeholder="Add Filter" />
-								<button>OK</button>
-							</form>
 						</div>
 					</div>
 
 					<div className="w-1/2">
-						<div className="mt-3 text-xl">Filters Set</div>
+						<div className="mt-2">
+							<form onSubmit={handleSubmit}>
+								<input
+									type="text"
+									placeholder="Add Filter"
+									value={userInputFilter}
+									onChange={(e) =>
+										setUserInputFilter(e.target.value)
+									}
+								/>
+								<button>OK</button>
+							</form>
+						</div>
+
+						<div className="mt-10 text-xl">Set Filters</div>
 						<div className="mt-4 h-150 overflow-scroll overflow-x-hidden">
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
-							<div className="flex justify-center gap-4">
-								<div>Delete</div>
-								<div>Color</div>
-								<div>Filter 1</div>
-							</div>
+							{filterList.map((filter) => {
+								return (
+									<div
+										className="flex justify-center gap-4"
+										key={filter.id}
+									>
+										<button
+											className="cursor-pointer"
+											onClick={() => deleteFilter(filter)}
+										>
+											x
+										</button>
+										<div>Color</div>
+										<div>{filter.value}</div>
+									</div>
+								);
+							})}
 						</div>
 					</div>
 				</div>
