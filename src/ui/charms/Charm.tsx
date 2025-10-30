@@ -6,8 +6,14 @@ import BackBtn from "../utils/BackBtn";
 
 function Charm() {
 	const { state } = useLocation();
-	const [userInputFilter, setUserInputFilter] = useState("");
+
+	const [symbolOne, setSymbolOne] = useState("");
+	const [numberOne, setNumberOne] = useState("");
+	const [symbolTwo, setSymbolTwo] = useState("");
+	const [numberTwo, setNumberTwo] = useState("");
+
 	const [filterList, setFilterList] = useState([]);
+	const [toggleAnd, setToggleAnd] = useState(false);
 
 	// Poll charm data
 	const addCharm = async () => {
@@ -30,24 +36,51 @@ function Charm() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		// Ignore empty strings
-		if (userInputFilter.trim() === "") return;
+		// Sanitize numberOne
+		if (numberOne.trim() === "") return;
+		if (!Number(numberOne)) return;
 
+		// Sanitize numberTwo
+		if (toggleAnd) {
+			if (numberTwo.trim() === "") return;
+			if (!Number(numberTwo)) return;
+		}
+
+		// Define user-inputted filter
 		const newFilter = {
 			id: Date.now(),
-			value: userInputFilter,
+			symbolOne,
+			numberOne,
+			symbolTwo: toggleAnd ? symbolTwo : null,
+			numberTwo: toggleAnd ? numberTwo : null,
+			displayOne: symbolOne + numberOne,
+			displayTwo: toggleAnd ? symbolTwo + numberTwo : null,
 		};
+
+		// Emit info to Notification center
+		eventBus.emit("symbol-one", symbolOne);
+		eventBus.emit("number-one", numberOne);
+		if (symbolTwo && numberTwo) {
+			eventBus.emit("symbol-two", symbolTwo);
+			eventBus.emit("number-two", numberTwo);
+		}
 
 		// Push input into filter list
 		setFilterList((prev) => [...prev, newFilter]);
 
-		// Reset user input
-		setUserInputFilter("");
+		// Reset inputs
+		setNumberOne("");
+		setNumberTwo("");
+		setToggleAnd(false);
 	};
 
 	// Delete filter from filter list
 	const deleteFilter = (filterToDelete) => {
 		setFilterList((prev) => prev.filter((f) => f.id !== filterToDelete.id));
+	};
+
+	const onToggle = () => {
+		setToggleAnd(!toggleAnd);
 	};
 	return (
 		<>
@@ -78,16 +111,74 @@ function Charm() {
 					<div className="w-1/2">
 						<div className="mt-2">
 							<form onSubmit={handleSubmit}>
-								<input
-									type="text"
-									placeholder="Add Filter"
-									value={userInputFilter}
-									onChange={(e) =>
-										setUserInputFilter(e.target.value)
-									}
-								/>
-								<button>OK</button>
+								<div>
+									<select
+										className="mr-2"
+										value={symbolOne}
+										onChange={(e) =>
+											setSymbolOne(e.target.value)
+										}
+									>
+										<option value="" disabled>
+											Select
+										</option>
+										<option value=">">&gt;</option>
+										<option value="=">=</option>
+										<option value="<">&lt;</option>
+									</select>
+
+									<input
+										type="text"
+										placeholder="Add Filter"
+										value={numberOne}
+										onChange={(e) =>
+											setNumberOne(e.target.value)
+										}
+									/>
+								</div>
+
+								{toggleAnd && (
+									<>
+										<div>
+											<select
+												className="mr-2"
+												value={symbolTwo}
+												onChange={(e) =>
+													setSymbolTwo(e.target.value)
+												}
+											>
+												<option value="" disabled>
+													Select
+												</option>
+												<option value=">">&gt;</option>
+												<option value="=">=</option>
+												<option value="<">&lt;</option>
+											</select>
+
+											<input
+												type="text"
+												placeholder="Add Filter"
+												value={numberTwo}
+												onChange={(e) =>
+													setNumberTwo(e.target.value)
+												}
+											/>
+										</div>
+									</>
+								)}
+
+								<button className="cursor-pointer">
+									Submit
+								</button>
 							</form>
+							<div className="flex justify-evenly">
+								<button
+									className="cursor-pointer"
+									onClick={onToggle}
+								>
+									{toggleAnd ? "-" : "+"}
+								</button>
+							</div>
 						</div>
 
 						<div className="mt-10 text-xl">Set Filters</div>
@@ -105,7 +196,11 @@ function Charm() {
 											x
 										</button>
 										<div>Color</div>
-										<div>{filter.value}</div>
+										<div>
+											{filter.displayTwo
+												? `${filter.displayOne} and ${filter.displayTwo}`
+												: filter.displayOne}
+										</div>
 									</div>
 								);
 							})}

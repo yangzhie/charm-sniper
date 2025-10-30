@@ -1,21 +1,38 @@
 // @ts-nocheck
 import { useState, useEffect } from "react";
 import { eventBus } from "../utils/eventBus";
+import { checkFilter } from "../utils/checkFilter";
 
 function Notifications() {
 	const [charm, setCharm] = useState<any>(null);
 	const [charmData, setCharmData] = useState<any>([]);
+
+	const [symbolOne, setSymbolOne] = useState("");
+	const [numberOne, setNumberOne] = useState("");
+	const [symbolTwo, setSymbolTwo] = useState("");
+	const [numberTwo, setNumberTwo] = useState("");
 
 	// Recieve charm and polling data from Charm component
 	useEffect(() => {
 		eventBus.on("new-charm-added", setCharm);
 		eventBus.on("new-charm-data", setCharmData);
 
+		eventBus.on("symbol-one", setSymbolOne);
+		eventBus.on("number-one", setNumberOne);
+		eventBus.on("symbol-two", setSymbolTwo);
+		eventBus.on("number-two", setNumberTwo);
+
 		return () => {
 			eventBus.off("new-charm-added", setCharm);
 			eventBus.off("new-charm-data", setCharmData);
+			eventBus.off("symbol-one", setSymbolOne);
+			eventBus.off("number-one", setNumberOne);
+			eventBus.off("symbol-two", setSymbolTwo);
+			eventBus.off("number-two", setNumberTwo);
 		};
 	}, []);
+
+	checkFilter(charmData, symbolOne, numberOne, symbolTwo, numberTwo);
 
 	if (!charm) return <div>No charm</div>;
 	return (
@@ -45,7 +62,9 @@ function Notifications() {
 										{data["charmPattern"]}
 									</td>
 									<td className="text-center">
-										${data["price"]}
+										{data["price"]
+											? `$ ${data["price"]}`
+											: "Sold!"}
 									</td>
 								</tr>
 							);
