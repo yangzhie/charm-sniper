@@ -1,15 +1,22 @@
+// @ts-nocheck
 import { useState, useEffect } from "react";
 import { eventBus } from "../utils/eventBus";
 
 function Notifications() {
 	const [charm, setCharm] = useState<any>(null);
+	const [charmData, setCharmData] = useState<any>([]);
 
-	useEffect((): any => {
+	// Recieve charm and polling data from Charm component
+	useEffect(() => {
 		eventBus.on("new-charm-added", setCharm);
-		return () => eventBus.off("new-charm-added", setCharm);
+		eventBus.on("new-charm-data", setCharmData);
+
+		return () => {
+			eventBus.off("new-charm-added", setCharm);
+			eventBus.off("new-charm-data", setCharmData);
+		};
 	}, []);
 
-	console.log(charm);
 	if (!charm) return <div>No charm</div>;
 	return (
 		<>
@@ -30,11 +37,19 @@ function Notifications() {
 							<th>Pattern</th>
 							<th>Price</th>
 						</tr>
-						<tr>
-							<td className="text-center">1</td>
-							<td className="text-center">88888</td>
-							<td className="text-center">$0.68</td>
-						</tr>
+						{charmData.map((data, idx) => {
+							return (
+								<tr key={idx}>
+									<td className="text-center">{idx + 1}</td>
+									<td className="text-center">
+										{data["charmPattern"]}
+									</td>
+									<td className="text-center">
+										${data["price"]}
+									</td>
+								</tr>
+							);
+						})}
 					</table>
 				</div>
 			</div>

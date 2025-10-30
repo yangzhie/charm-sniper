@@ -8,6 +8,8 @@ import {
 	fetchCollections,
 } from "./fetch.js";
 
+let pollInterval: number | null = null;
+
 app.on("ready", () => {
 	const mainWindow = new BrowserWindow({
 		title: "Charm Sniper",
@@ -31,14 +33,38 @@ app.on("ready", () => {
 		);
 	}
 
-	// Send static collection + charm data to renderer (one-time)
-	// Renderer requests the data
+	// --------- Static Collection Data ----------
 	ipcMain.handle("get-static-data", async () => {
 		const data = await fetchCollections();
 		return data;
 	});
 
-	ipcMain.handle("listen-charm-name", async (event, charmName) => {
-		console.log(charmName);
+	// ------------------------- Polling ------------------------------
+	ipcMain.on("start-charm-polling", async (event, charmName) => {
+		await fetchAndSendCharmData(charmName, mainWindow);
+
+		if (pollInterval) clearInterval(pollInterval);
+
+		// @ts-ignore
+		// Poll every 20 seconds
+		pollInterval = setInterval(() => {
+			fetchAndSendCharmData(charmName, mainWindow);
+		}, 20000);
 	});
 });
+
+async function fetchAndSendCharmData(
+	charmName: string,
+	mainWindow: BrowserWindow
+) {
+	try {
+		// Fetch data
+		const arr = await fetchInspectLinkFromSteam(charmName);
+		const data = await fetchInspectDataFromAPI(arr);
+
+		// Send update to renderer
+		mainWindow.webContents.send("charm-data-update", data);
+	} catch (error) {
+		console.error("Polling error:", error);
+	}
+}

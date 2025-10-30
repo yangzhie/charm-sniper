@@ -3,9 +3,10 @@ import { contextBridge, ipcRenderer } from "electron";
 
 const API = {
 	getStaticData: () => ipcRenderer.invoke("get-static-data"),
-	listenCharmName: (charmName) => {
-		return ipcRenderer.invoke("listen-charm-name", charmName);
-	},
+	startCharmPolling: (charmName) =>
+		ipcRenderer.send("start-charm-polling", charmName),
+	onCharmDataUpdate: (callback) =>
+		ipcRenderer.on("charm-data-update", (_event, data) => callback(data)),
 };
 
 contextBridge.exposeInMainWorld("api", API);

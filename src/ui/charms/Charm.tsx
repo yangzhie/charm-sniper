@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { eventBus } from "../utils/eventBus";
 import BackBtn from "../utils/BackBtn";
@@ -6,13 +7,22 @@ import BackBtn from "../utils/BackBtn";
 function Charm() {
 	const { state } = useLocation();
 
-	// Function to give data of current charm
-	const addCharm = () => {
-		// Give charm into to notification center
+	// Poll charm data
+	const addCharm = async () => {
+		console.log("Starting charm polling for:", state.name);
+
+		// Send charm name to notification center
 		eventBus.emit("new-charm-added", state);
 
-		// Give charm name to main process
-		window.api.listenCharmName(state["name"]);
+		// Start polling (fire and forget)
+		window.api.startCharmPolling(state["name"]);
+
+		// Listen for updates
+		const handleUpdate = (data) => {
+			console.log("Received charm data:", data);
+			eventBus.emit("new-charm-data", data);
+		};
+		window.api.onCharmDataUpdate(handleUpdate);
 	};
 	return (
 		<>
