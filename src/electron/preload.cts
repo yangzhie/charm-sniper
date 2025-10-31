@@ -9,6 +9,7 @@ const API = {
 		ipcRenderer.on("charm-data-update", (_event, data) => callback(data)),
 	onError: (callback) =>
 		ipcRenderer.on("error", (_event, error) => callback(error)),
+	notify: (title, body) => ipcRenderer.send("notify", { title, body }),
 	removeAllListeners: (channel) => ipcRenderer.removeAllListeners(channel),
 };
 

@@ -55,5 +55,14 @@ export const checkFilter = (
 		highlightIndexArray.push(highlightIndex);
 	}
 
+	if (filteredPatterns.length !== 0) {
+		for (let i = 0; i < filteredPatterns.length; i++) {
+			window.api.notify(
+				`Pattern: ${filteredPatterns[i]["pattern"]}`,
+				`Index: ${filteredPatterns[i]["index"]}`
+			);
+		}
+	}
+
 	return highlightIndexArray;
 };

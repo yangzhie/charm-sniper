@@ -1,4 +1,10 @@
-import { app, BrowserWindow, ipcMain, webContents } from "electron";
+import {
+	app,
+	BrowserWindow,
+	ipcMain,
+	webContents,
+	Notification,
+} from "electron";
 import path from "path";
 import { isDev, getPreloadPath } from "./utils.js";
 import {
@@ -49,7 +55,19 @@ app.on("ready", () => {
 		// Poll every 20 seconds
 		pollInterval = setInterval(() => {
 			fetchAndSendCharmData(charmName, mainWindow);
-		}, 10000);
+		}, 22000);
+	});
+
+	// --- Listen for notification requests from renderer ---
+	ipcMain.on("notify", (_event, { title, body }) => {
+		// @ts-ignore
+		const notification = new Notification({
+			title: title,
+			body: body,
+			silent: false,
+		});
+
+		notification.show();
 	});
 });
 
