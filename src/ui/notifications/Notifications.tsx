@@ -32,7 +32,14 @@ function Notifications() {
 		};
 	}, []);
 
-	checkFilter(charmData, symbolOne, numberOne, symbolTwo, numberTwo);
+	// Recieve indexes of patterns
+	const highlightIndexArray = checkFilter(
+		charmData,
+		symbolOne,
+		numberOne,
+		symbolTwo,
+		numberTwo
+	);
 
 	if (!charm) return <div>No charm</div>;
 	return (
@@ -57,7 +64,18 @@ function Notifications() {
 						{charmData.map((data, idx) => {
 							return (
 								<tr key={idx}>
-									<td className="text-center">{idx + 1}</td>
+									<td
+										key={idx}
+										className={`text-center ${
+											highlightIndexArray.includes(
+												idx + 1
+											)
+												? "text-red-500"
+												: ""
+										}`}
+									>
+										{idx + 1}
+									</td>
 									<td className="text-center">
 										{data["charmPattern"]}
 									</td>

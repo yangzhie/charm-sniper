@@ -19,30 +19,41 @@ export const checkFilter = (
 		// Filter patterns by symbol and value
 		for (let i = 0; i < patternArr.length; i++) {
 			if (symbolOne === ">" && patternArr[i] > numberOne) {
-				filteredPatterns.push(patternArr[i]);
+				filteredPatterns.push({ index: i + 1, pattern: patternArr[i] });
 			} else if (symbolOne === "<" && patternArr[i] < numberOne) {
-				filteredPatterns.push(patternArr[i]);
+				filteredPatterns.push({ index: i + 1, pattern: patternArr[i] });
 			} else if (symbolOne === "=" && patternArr[i] === numberOne) {
-				filteredPatterns.push(patternArr[i]);
+				filteredPatterns.push({ index: i + 1, pattern: patternArr[i] });
 			}
 		}
 	} else {
 		for (let i = 0; i < patternArr.length; i++) {
 			if (symbolOne === ">" && symbolTwo === "<") {
 				if (patternArr[i] > numberOne && patternArr[i] < numberTwo) {
-					filteredPatterns.push(patternArr[i]);
+					filteredPatterns.push({
+						index: i + 1,
+						pattern: patternArr[i],
+					});
 				}
 			}
 
 			if (symbolOne === "<" && symbolTwo === ">") {
 				if (patternArr[i] < numberOne && patternArr[i] > numberTwo) {
-					filteredPatterns.push(patternArr[i]);
+					filteredPatterns.push({
+						index: i + 1,
+						pattern: patternArr[i],
+					});
 				}
 			}
 		}
 	}
 
-	console.log(filteredPatterns);
+	// Obtain and store indexes
+	const highlightIndexArray = [];
+	for (let i = 0; i < filteredPatterns.length; i++) {
+		const highlightIndex = filteredPatterns[i]["index"];
+		highlightIndexArray.push(highlightIndex);
+	}
 
-	return filteredPatterns;
+	return highlightIndexArray;
 };
