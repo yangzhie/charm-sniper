@@ -17,8 +17,6 @@ function Charm() {
 
 	// Poll charm data
 	const addCharm = async () => {
-		console.log("Starting charm polling for:", state.name);
-
 		// Send charm name to notification center
 		eventBus.emit("new-charm-added", state);
 

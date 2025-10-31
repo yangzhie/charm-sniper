@@ -49,7 +49,7 @@ app.on("ready", () => {
 		// Poll every 20 seconds
 		pollInterval = setInterval(() => {
 			fetchAndSendCharmData(charmName, mainWindow);
-		}, 20000);
+		}, 10000);
 	});
 });
 
@@ -64,7 +64,12 @@ async function fetchAndSendCharmData(
 
 		// Send update to renderer
 		mainWindow.webContents.send("charm-data-update", data);
+		// @ts-ignore
+		mainWindow.webContents.send("error", null);
 	} catch (error) {
 		console.error("Polling error:", error);
+
+		// @ts-ignore
+		mainWindow.webContents.send("error", { message: error.message });
 	}
 }
