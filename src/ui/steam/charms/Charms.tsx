@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import BackBtn from "../utils/BackBtn";
+import BackBtn from "../../utils/BackBtn";
 
 // @ts-ignore
 function Charms({ charmsData }) {

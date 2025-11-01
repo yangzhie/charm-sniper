@@ -46,7 +46,7 @@ app.on("ready", () => {
 	});
 
 	// ------------------------- Polling ------------------------------
-	ipcMain.on("start-charm-polling", async (event, charmName) => {
+	ipcMain.on("start-charm-polling", async (_event, charmName) => {
 		await fetchAndSendCharmData(charmName, mainWindow);
 
 		if (pollInterval) clearInterval(pollInterval);
@@ -68,6 +68,27 @@ app.on("ready", () => {
 		});
 
 		notification.show();
+	});
+
+	// --------- Fetch charm data on CSFloat ----------
+	ipcMain.handle("csfloat-data", async (_event, charmName) => {
+		setInterval(async () => {
+			try {
+				const data = await fetchFromCSFloat(
+					50,
+					"most_recent",
+					null,
+					null,
+					null,
+					"buy_now",
+					charmName
+				);
+
+				mainWindow.webContents.send("csfloat-data-update", data);
+			} catch (err) {
+				console.error("CSFloat fetch error:", err);
+			}
+		}, 20000);
 	});
 });
 

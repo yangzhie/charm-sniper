@@ -10,6 +10,10 @@ const API = {
 	onError: (callback) =>
 		ipcRenderer.on("error", (_event, error) => callback(error)),
 	notify: (title, body) => ipcRenderer.send("notify", { title, body }),
+	invokeCSFloatData: (charmName) =>
+		ipcRenderer.invoke("csfloat-data", charmName),
+	onCSFloatDataUpdate: (callback) =>
+		ipcRenderer.on("csfloat-data-update", (_event, data) => callback(data)),
 	removeAllListeners: (channel) => ipcRenderer.removeAllListeners(channel),
 };
 

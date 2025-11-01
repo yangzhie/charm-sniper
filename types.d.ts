@@ -1,6 +1,6 @@
 // Global types
 type PageCount = 1 | 10;
-type Limit = 10 | 20 | 30;
+type Limit = 10 | 20 | 30 | 50;
 type Sort = "lowest_price" | "highest_price" | "most_recent";
 type RERE = "buy_now" | "auction";
 

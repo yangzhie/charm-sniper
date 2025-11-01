@@ -7,12 +7,15 @@ import {
 } from "react-router-dom";
 
 import Title from "./utils/Title";
-import Charm from "./charms/Charm";
-import Charms from "./charms/Charms";
-import Collections from "./collections/Collections";
-import Notifications from "./notifications/Notifications";
+import Charm from "./steam/charms/Charm";
+import Charms from "./steam/charms/Charms";
+import Collections from "./steam/collections/Collections";
+import Notifications from "./steam/notifications/Notifications";
+import Main from "./csfloat/Main";
 
 function App() {
+	const [toggleCSFloat, setToggleCSFloat] = useState(true);
+
 	const [missingLinkCollection, setMissingLinkCollection] = useState([]);
 	const [smallArmsCollection, setSmallArmsCollection] = useState([]);
 	const [missingLinkCommunityCollection, setDrBoomCollection] = useState([]);
@@ -44,47 +47,66 @@ function App() {
 		missingLinkCommunityCollection,
 		drBoomCollection,
 	];
+
+	// @ts-ignore
+	const handleToggleFromTitle = (newValue) => {
+		setToggleCSFloat(newValue);
+	};
 	return (
 		<>
 			<Router>
 				<div className="h-screen box-border overflow-hidden">
-					<Title />
+					<Title
+						title={toggleCSFloat ? "Steam" : "CSFloat"}
+						toggleFloat={handleToggleFromTitle}
+					/>
+
+					{toggleCSFloat && (
+						<div className="flex h-full">
+							<div className="w-2/3 text-center">
+								<Routes>
+									{/* Route to set root to collections */}
+									<Route
+										path="/"
+										element={
+											<Navigate
+												to="/collections"
+												replace
+											/>
+										}
+									/>
+
+									<Route
+										path="/collections"
+										element={
+											<Collections
+												collectionArr={collectionArr}
+											/>
+										}
+									/>
+
+									<Route
+										path="/collections/:collectionCharm"
+										element={
+											<Charms charmsData={charmsData} />
+										}
+									/>
+
+									<Route
+										path="/collections/:collectionCharm/:charm"
+										element={<Charm />}
+									/>
+								</Routes>
+							</div>
+
+							<div className="w-1/3 border-l-1">
+								<Notifications />
+							</div>
+						</div>
+					)}
 
 					<div className="flex h-full">
-						<div className="w-2/3 text-center">
-							<Routes>
-								{/* Route to set root to collections */}
-								<Route
-									path="/"
-									element={
-										<Navigate to="/collections" replace />
-									}
-								/>
-
-								<Route
-									path="/collections"
-									element={
-										<Collections
-											collectionArr={collectionArr}
-										/>
-									}
-								/>
-
-								<Route
-									path="/collections/:collectionCharm"
-									element={<Charms charmsData={charmsData} />}
-								/>
-
-								<Route
-									path="/collections/:collectionCharm/:charm"
-									element={<Charm />}
-								/>
-							</Routes>
-						</div>
-
-						<div className="w-1/3 border-l-1">
-							<Notifications />
-						</div>
+						<Main />
 					</div>
 				</div>
 			</Router>

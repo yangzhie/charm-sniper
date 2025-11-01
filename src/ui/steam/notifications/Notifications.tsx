@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { useState, useEffect } from "react";
-import { eventBus } from "../utils/eventBus";
-import { checkFilter } from "../utils/checkFilter";
+import { eventBus } from "../../utils/eventBus";
+import { checkFilter } from "../../utils/checkFilter";
 
 function Notifications() {
 	const [charm, setCharm] = useState<any>(null);

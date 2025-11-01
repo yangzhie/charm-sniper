@@ -1,8 +1,8 @@
 // @ts-nocheck
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { eventBus } from "../utils/eventBus";
-import BackBtn from "../utils/BackBtn";
+import { eventBus } from "../../utils/eventBus";
+import BackBtn from "../../utils/BackBtn";
 
 function Charm() {
 	const { state } = useLocation();
