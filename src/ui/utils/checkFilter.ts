@@ -1,68 +1,33 @@
 // @ts-nocheck
-export const checkFilter = (
-	charmArr,
-	symbolOne,
-	numberOne,
-	symbolTwo = null,
-	numberTwo = null
-) => {
-	// Create pattern array
-	const patternArr = [];
-	charmArr.map((charm) => {
-		patternArr.push(charm["charmPattern"]);
+export const checkFilter = (charmArr, filters) => {
+	const highlightIndexes = new Set();
+
+	charmArr.forEach((charm, i) => {
+		const pattern = Number(charm["charmPattern"]);
+
+		for (const f of filters) {
+			const pass1 =
+				(f.symbolOne === ">" && pattern > f.numberOne) ||
+				(f.symbolOne === "<" && pattern < f.numberOne) ||
+				(f.symbolOne === "=" && pattern === Number(f.numberOne));
+
+			let pass2 = true;
+
+			if (f.symbolTwo && f.numberTwo) {
+				pass2 =
+					(f.symbolTwo === ">" && pattern > f.numberTwo) ||
+					(f.symbolTwo === "<" && pattern < f.numberTwo) ||
+					(f.symbolTwo === "=" && pattern === Number(f.numberTwo));
+			}
+
+			// If matches ANY filter
+			if (pass1 && pass2) {
+				highlightIndexes.add(i + 1);
+
+				window.api.notify(`Pattern: ${pattern}`, `Index: ${i + 1}`);
+			}
+		}
 	});
 
-	const filteredPatterns = [];
-
-	// TODO: Handle edge case errors (=, > >, < <)
-	if (!symbolTwo && !numberTwo) {
-		// Filter patterns by symbol and value
-		for (let i = 0; i < patternArr.length; i++) {
-			if (symbolOne === ">" && patternArr[i] > numberOne) {
-				filteredPatterns.push({ index: i + 1, pattern: patternArr[i] });
-			} else if (symbolOne === "<" && patternArr[i] < numberOne) {
-				filteredPatterns.push({ index: i + 1, pattern: patternArr[i] });
-			} else if (symbolOne === "=" && patternArr[i] === numberOne) {
-				filteredPatterns.push({ index: i + 1, pattern: patternArr[i] });
-			}
-		}
-	} else {
-		for (let i = 0; i < patternArr.length; i++) {
-			if (symbolOne === ">" && symbolTwo === "<") {
-				if (patternArr[i] > numberOne && patternArr[i] < numberTwo) {
-					filteredPatterns.push({
-						index: i + 1,
-						pattern: patternArr[i],
-					});
-				}
-			}
-
-			if (symbolOne === "<" && symbolTwo === ">") {
-				if (patternArr[i] < numberOne && patternArr[i] > numberTwo) {
-					filteredPatterns.push({
-						index: i + 1,
-						pattern: patternArr[i],
-					});
-				}
-			}
-		}
-	}
-
-	// Obtain and store indexes
-	const highlightIndexArray = [];
-	for (let i = 0; i < filteredPatterns.length; i++) {
-		const highlightIndex = filteredPatterns[i]["index"];
-		highlightIndexArray.push(highlightIndex);
-	}
-
-	if (filteredPatterns.length !== 0) {
-		for (let i = 0; i < filteredPatterns.length; i++) {
-			window.api.notify(
-				`Pattern: ${filteredPatterns[i]["pattern"]}`,
-				`Index: ${filteredPatterns[i]["index"]}`
-			);
-		}
-	}
-
-	return highlightIndexArray;
+	return Array.from(highlightIndexes);
 };

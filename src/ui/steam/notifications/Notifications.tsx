@@ -6,6 +6,8 @@ import { checkFilter } from "../../utils/checkFilter";
 function Notifications() {
 	const [charm, setCharm] = useState<any>(null);
 	const [charmData, setCharmData] = useState<any>([]);
+	const [filters, setFilters] = useState([]);
+	const [highlightIndexes, setHighlightIndexes] = useState([]);
 	const [error, setError] = useState<"success" | "fail">("fail");
 
 	const [symbolOne, setSymbolOne] = useState("");
@@ -18,10 +20,10 @@ function Notifications() {
 		eventBus.on("new-charm-added", setCharm);
 		eventBus.on("new-charm-data", setCharmData);
 
-		eventBus.on("symbol-one", setSymbolOne);
-		eventBus.on("number-one", setNumberOne);
-		eventBus.on("symbol-two", setSymbolTwo);
-		eventBus.on("number-two", setNumberTwo);
+		// When filters are updated
+		eventBus.on("filter-list-updated", (filterList) => {
+			setFilters(filterList);
+		});
 
 		// Listen for polling errors
 		const handleError = (pollError) => {
@@ -43,22 +45,22 @@ function Notifications() {
 		return () => {
 			eventBus.off("new-charm-added", setCharm);
 			eventBus.off("new-charm-data", setCharmData);
-			eventBus.off("symbol-one", setSymbolOne);
-			eventBus.off("number-one", setNumberOne);
-			eventBus.off("symbol-two", setSymbolTwo);
-			eventBus.off("number-two", setNumberTwo);
+			eventBus.off("filter-list-updated", setSymbolOne);
 			window.api.removeAllListeners("error");
 		};
 	}, []);
 
-	// Recieve indexes of patterns
-	const highlightIndexArray = checkFilter(
-		charmData,
-		symbolOne,
-		numberOne,
-		symbolTwo,
-		numberTwo
-	);
+	// Run filtering whenever data or filters change
+	useEffect(() => {
+		if (!charmData.length || !filters.length) {
+			setHighlightIndexes([]);
+			return;
+		}
+
+		// Recieve and set highlighted indexes
+		const result = checkFilter(charmData, filters);
+		setHighlightIndexes(result);
+	}, [charmData, filters]);
 
 	if (!charm) return <div>No charm</div>;
 	return (
@@ -103,9 +105,7 @@ function Notifications() {
 									<td
 										key={idx}
 										className={`text-center ${
-											highlightIndexArray.includes(
-												idx + 1
-											)
+											highlightIndexes.includes(idx + 1)
 												? "text-red-500"
 												: ""
 										}`}

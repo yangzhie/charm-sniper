@@ -55,16 +55,12 @@ function Charm() {
 			displayTwo: toggleAnd ? symbolTwo + numberTwo : null,
 		};
 
-		// Emit info to Notification center
-		eventBus.emit("symbol-one", symbolOne);
-		eventBus.emit("number-one", numberOne);
-		if (symbolTwo && numberTwo) {
-			eventBus.emit("symbol-two", symbolTwo);
-			eventBus.emit("number-two", numberTwo);
-		}
+		// Push filter into filter list
+		const updatedFilters = [...filterList, newFilter];
+		setFilterList(updatedFilters);
 
-		// Push input into filter list
-		setFilterList((prev) => [...prev, newFilter]);
+		// Emit filter list to Notifications
+		eventBus.emit("filter-list-updated", updatedFilters);
 
 		// Reset inputs
 		setNumberOne("");
@@ -72,9 +68,12 @@ function Charm() {
 		setToggleAnd(false);
 	};
 
-	// Delete filter from filter list
-	const deleteFilter = (filterToDelete) => {
-		setFilterList((prev) => prev.filter((f) => f.id !== filterToDelete.id));
+	// Delete filter
+	const deleteFilter = (id) => {
+		const updatedFilters = filterList.filter((filter) => filter.id !== id);
+		setFilterList(updatedFilters);
+
+		eventBus.emit("filter-list-updated", updatedFilters);
 	};
 
 	const onToggle = () => {
@@ -189,7 +188,9 @@ function Charm() {
 									>
 										<button
 											className="cursor-pointer"
-											onClick={() => deleteFilter(filter)}
+											onClick={() =>
+												deleteFilter(filter.id)
+											}
 										>
 											x
 										</button>
