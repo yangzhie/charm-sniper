@@ -4,6 +4,12 @@ import { useLocation } from "react-router-dom";
 import { eventBus } from "../../utils/eventBus";
 import BackBtn from "../../utils/BackBtn";
 
+const repeatingNumbers = [
+	11111, 22222, 33333, 44444, 55555, 66666, 77777, 88888, 1111, 2222, 3333,
+	4444, 5555, 6666, 7777, 8888, 9999, 10000, 20000, 30000, 40000, 50000,
+	60000, 70000, 80000, 90000, 1337, 6969, 12345, 42069, 69420, 8008, 80085,
+];
+
 function Charm() {
 	const { state } = useLocation();
 
@@ -79,6 +85,49 @@ function Charm() {
 	const onToggle = () => {
 		setToggleAnd(!toggleAnd);
 	};
+
+	// --- Preset tag functions ---
+	const gt99000 = () => {
+		const newFilter = {
+			id: Date.now(),
+			symbolOne: ">",
+			numberOne: "99000",
+			displayOne: ">99000",
+		};
+
+		const updatedFilters = [...filterList, newFilter];
+		setFilterList(updatedFilters);
+
+		eventBus.emit("filter-list-updated", updatedFilters);
+	};
+
+	const lt1000 = () => {
+		const newFilter = {
+			id: Date.now(),
+			symbolOne: "<",
+			numberOne: "1000",
+			displayOne: "<1000",
+		};
+
+		const updatedFilters = [...filterList, newFilter];
+		setFilterList(updatedFilters);
+
+		eventBus.emit("filter-list-updated", updatedFilters);
+	};
+
+	const eq = () => {
+		const newFilters = repeatingNumbers.map((number) => ({
+			id: Date.now(),
+			symbolOne: "=",
+			numberOne: number.toString(),
+			displayOne: "=" + number.toString(),
+		}));
+
+		const updatedFilters = [...filterList, ...newFilters];
+		setFilterList(updatedFilters);
+
+		eventBus.emit("filter-list-updated", updatedFilters);
+	};
 	return (
 		<>
 			<BackBtn />
@@ -100,7 +149,21 @@ function Charm() {
 						<div className="flex flex-col mt-6 h-50">
 							<div>Preset Filter Tags</div>
 							<div className="flex flex-wrap gap-4 justify-center overflow-scroll overflow-x-hidden">
-								<div>Tags</div>
+								<button
+									className="cursor-pointer"
+									onClick={gt99000}
+								>
+									&gt;99000
+								</button>
+								<button
+									className="cursor-pointer"
+									onClick={lt1000}
+								>
+									&lt;1000
+								</button>
+								<button className="cursor-pointer" onClick={eq}>
+									Unique Numbers
+								</button>
 							</div>
 						</div>
 					</div>
