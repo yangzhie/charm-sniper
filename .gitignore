@@ -15,6 +15,9 @@ dist-electron
 *.local
 .env
 
+# Re-add later - find out env vars
+csgofloat-config.js
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
