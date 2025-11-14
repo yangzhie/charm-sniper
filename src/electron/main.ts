@@ -10,7 +10,6 @@ import { isDev, getPreloadPath } from "./utils.js";
 import {
 	fetchInspectLinkFromSteam,
 	fetchInspectDataFromAPI,
-	fetchFromCSFloat,
 	fetchCollections,
 } from "./fetch.js";
 
@@ -71,25 +70,25 @@ app.on("ready", () => {
 	});
 
 	// --------- Fetch charm data on CSFloat ----------
-	ipcMain.handle("csfloat-data", async (_event, charmName) => {
-		setInterval(async () => {
-			try {
-				const data = await fetchFromCSFloat(
-					50,
-					"most_recent",
-					null,
-					null,
-					null,
-					"buy_now",
-					charmName
-				);
+	// ipcMain.handle("csfloat-data", async (_event, charmName) => {
+	// 	setInterval(async () => {
+	// 		try {
+	// 			const data = await fetchFromCSFloat(
+	// 				50,
+	// 				"most_recent",
+	// 				null,
+	// 				null,
+	// 				null,
+	// 				"buy_now",
+	// 				charmName
+	// 			);
 
-				mainWindow.webContents.send("csfloat-data-update", data);
-			} catch (err) {
-				console.error("CSFloat fetch error:", err);
-			}
-		}, 20000);
-	});
+	// 			mainWindow.webContents.send("csfloat-data-update", data);
+	// 		} catch (err) {
+	// 			console.error("CSFloat fetch error:", err);
+	// 		}
+	// 	}, 20000);
+	// });
 });
 
 async function fetchAndSendCharmData(

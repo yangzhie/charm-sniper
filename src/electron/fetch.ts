@@ -100,93 +100,93 @@ export const fetchInspectDataFromAPI = async (
 };
 
 // Fetch CSFloat data from CSFloat API
-export const fetchFromCSFloat = async (
-	limit: Limit = 10,
-	sort: Sort = "lowest_price",
-	minFloat: number | null = null,
-	maxFloat: number | null = null,
-	paintSeed: number | null = null,
-	type: RERE = "buy_now",
-	marketHashName: string
-): Promise<CSFloatObj | null> => {
-	const csfloatURL: URL = new URL("https://csfloat.com/api/v1/listings");
-	const params: URLSearchParams = new URLSearchParams();
+// export const fetchFromCSFloat = async (
+// 	limit: Limit = 10,
+// 	sort: Sort = "lowest_price",
+// 	minFloat: number | null = null,
+// 	maxFloat: number | null = null,
+// 	paintSeed: number | null = null,
+// 	type: RERE = "buy_now",
+// 	marketHashName: string
+// ): Promise<CSFloatObj | null> => {
+// 	const csfloatURL: URL = new URL("https://csfloat.com/api/v1/listings");
+// 	const params: URLSearchParams = new URLSearchParams();
 
-	if (limit !== undefined) {
-		params.append("limit", limit.toString());
-	}
-	if (sort) {
-		params.append("sort_by", sort);
-	}
+// 	if (limit !== undefined) {
+// 		params.append("limit", limit.toString());
+// 	}
+// 	if (sort) {
+// 		params.append("sort_by", sort);
+// 	}
 
-	if (minFloat !== null) {
-		params.append("min_float", minFloat.toString());
-	}
+// 	if (minFloat !== null) {
+// 		params.append("min_float", minFloat.toString());
+// 	}
 
-	if (maxFloat !== null) {
-		params.append("max_float", maxFloat.toString());
-	}
+// 	if (maxFloat !== null) {
+// 		params.append("max_float", maxFloat.toString());
+// 	}
 
-	if (paintSeed != null) {
-		params.append("paint_seed", paintSeed.toString());
-	}
-	if (type !== undefined) {
-		params.append("type", type);
-	}
-	if (marketHashName !== undefined) {
-		params.append("market_hash_name", marketHashName);
-	}
+// 	if (paintSeed != null) {
+// 		params.append("paint_seed", paintSeed.toString());
+// 	}
+// 	if (type !== undefined) {
+// 		params.append("type", type);
+// 	}
+// 	if (marketHashName !== undefined) {
+// 		params.append("market_hash_name", marketHashName);
+// 	}
 
-	csfloatURL.search = params.toString();
+// 	csfloatURL.search = params.toString();
 
-	try {
-		const res: Response = await fetch(csfloatURL, {
-			headers: {
-				// Non-null assertion with "!"
-				Authorization: process.env.csfloatAPIKey!,
-			},
-		});
+// 	try {
+// 		const res: Response = await fetch(csfloatURL, {
+// 			headers: {
+// 				// Non-null assertion with "!"
+// 				Authorization: process.env.csfloatAPIKey!,
+// 			},
+// 		});
 
-		if (!res.ok) {
-			throw new Error(`Err: ${res.status}`);
-		}
+// 		if (!res.ok) {
+// 			throw new Error(`Err: ${res.status}`);
+// 		}
 
-		let data: CSFloatData = await res.json();
+// 		let data: CSFloatData = await res.json();
 
-		// Extract data
-		const itemID: string = data["data"][0]["id"];
+// 		// Extract data
+// 		const itemID: string = data["data"][0]["id"];
 
-		const timestamp: string = data["data"][0]["created_at"];
-		const postedTime = dayjs(timestamp);
-		dayjs.extend(relativeTime);
-		const timeMessage: string = postedTime.fromNow();
+// 		const timestamp: string = data["data"][0]["created_at"];
+// 		const postedTime = dayjs(timestamp);
+// 		dayjs.extend(relativeTime);
+// 		const timeMessage: string = postedTime.fromNow();
 
-		const price: number = data["data"][0]["price"] / 100;
+// 		const price: number = data["data"][0]["price"] / 100;
 
-		const charmIndex: number = data["data"][0]["item"]["keychain_index"];
-		const charmPattern: number =
-			data["data"][0]["item"]["keychain_pattern"];
-		const icon: string = data["data"][0]["item"]["icon_url"];
-		const name: string = data["data"][0]["item"]["market_hash_name"];
-		const inspectLink: string = data["data"][0]["item"]["inspect_link"];
+// 		const charmIndex: number = data["data"][0]["item"]["keychain_index"];
+// 		const charmPattern: number =
+// 			data["data"][0]["item"]["keychain_pattern"];
+// 		const icon: string = data["data"][0]["item"]["icon_url"];
+// 		const name: string = data["data"][0]["item"]["market_hash_name"];
+// 		const inspectLink: string = data["data"][0]["item"]["inspect_link"];
 
-		const obj: CSFloatObj = {
-			itemID,
-			timeMessage,
-			price,
-			charmIndex,
-			charmPattern,
-			icon,
-			name,
-			inspectLink,
-		};
+// 		const obj: CSFloatObj = {
+// 			itemID,
+// 			timeMessage,
+// 			price,
+// 			charmIndex,
+// 			charmPattern,
+// 			icon,
+// 			name,
+// 			inspectLink,
+// 		};
 
-		return obj;
-	} catch (err) {
-		console.error(err);
-		return null;
-	}
-};
+// 		return obj;
+// 	} catch (err) {
+// 		console.error(err);
+// 		return null;
+// 	}
+// };
 
 // Fetch collections data
 export const fetchCollections =
